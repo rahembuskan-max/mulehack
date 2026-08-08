@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MuleHack · Stresser</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0f;
+            color: #c8d0e0;
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(120, 255, 214, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(120, 255, 214, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .spot {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(80px);
+            opacity: 0.65;
+            animation: glowPulse 10s ease-in-out infinite alternate;
+        }
+        .spot-1 { width: 600px; height: 600px; top: -20%; right: -10%; background: radial-gradient(circle, rgba(120,255,214,0.6) 0%, rgba(120,255,214,0.15) 40%, transparent 70%); animation-delay: 0s; }
+        .spot-2 { width: 500px; height: 500px; bottom: -15%; left: -10%; background: radial-gradient(circle, rgba(168,255,120,0.5) 0%, rgba(168,255,120,0.12) 40%, transparent 70%); animation-delay: 2.5s; }
+        .spot-3 { width: 400px; height: 400px; top: 30%; left: 55%; background: radial-gradient(circle, rgba(0,212,255,0.45) 0%, rgba(0,212,255,0.1) 40%, transparent 70%); animation-delay: 4.5s; }
+        .spot-4 { width: 450px; height: 450px; top: 60%; right: 5%; background: radial-gradient(circle, rgba(120,255,214,0.5) 0%, rgba(120,255,214,0.12) 40%, transparent 70%); animation-delay: 1.5s; }
+        .spot-5 { width: 350px; height: 350px; top: 8%; left: 12%; background: radial-gradient(circle, rgba(168,255,120,0.45) 0%, rgba(168,255,120,0.1) 40%, transparent 70%); animation-delay: 3.5s; }
+        .spot-6 { width: 300px; height: 300px; top: 45%; left: 8%; background: radial-gradient(circle, rgba(120,255,214,0.35) 0%, rgba(120,255,214,0.08) 40%, transparent 70%); animation-delay: 5.5s; }
+        .spot-7 { width: 380px; height: 380px; bottom: -5%; right: 25%; background: radial-gradient(circle, rgba(0,212,255,0.3) 0%, rgba(0,212,255,0.08) 40%, transparent 70%); animation-delay: 6.5s; }
+        @keyframes glowPulse {
+            0% { opacity: 0.45; transform: scale(1); }
+            100% { opacity: 0.85; transform: scale(1.12); }
+        }
+        .sidebar {
+            width: 240px;
+            min-width: 240px;
+            background: rgba(13, 13, 22, 0.95);
+            backdrop-filter: blur(24px);
+            border-right: 1px solid rgba(120, 255, 214, 0.06);
+            padding: 20px 14px 20px 16px;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(120, 255, 214, 0.1) transparent;
+        }
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-track { background: transparent; }
+        .sidebar::-webkit-scrollbar-thumb { background: rgba(120, 255, 214, 0.15); border-radius: 4px; }
+        .sidebar .logo { font-size: 22px; font-weight: 700; color: #fff; padding: 4px 10px 16px 10px; text-align: left; letter-spacing: -0.5px; border-bottom: 1px solid rgba(120, 255, 214, 0.06); margin-bottom: 10px; }
+        .sidebar .logo span { background: linear-gradient(135deg, #a8ff78, #78ffd6, #00d4ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .sidebar .category { font-size: 9px; text-transform: uppercase; letter-spacing: 1.2px; color: #3d455a; padding: 10px 10px 4px 10px; font-weight: 600; }
+        .sidebar a {
+            color: #5a6279;
+            text-decoration: none;
+            font-size: 13px;
+            padding: 7px 12px;
+            border-radius: 6px;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            margin: 1px 0;
+        }
+        .sidebar a i { width: 18px; font-size: 14px; color: #3d455a; transition: 0.15s; }
+        .sidebar a:hover { background: rgba(120, 255, 214, 0.05); color: #c8d0e0; }
+        .sidebar a:hover i { color: #5a6279; }
+        .sidebar a.active {
+            background: rgba(120, 255, 214, 0.07);
+            color: #78ffd6;
+            border-left: 2.5px solid #78ffd6;
+            box-shadow: inset 0 0 30

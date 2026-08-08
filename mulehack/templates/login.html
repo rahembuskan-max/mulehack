@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Silent Net · Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #c8d0e0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ===== BACKGROUND GRID ===== */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(120, 255, 214, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(120, 255, 214, 0.04) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ===== GREEN CHROME LIGHT SPOTS ===== */
+        .spot {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: gentlePulse 8s ease-in-out infinite alternate;
+        }
+        .spot-1 {
+            width: 600px;
+            height: 600px;
+            top: -20%;
+            right: -10%;
+            background: radial-gradient(circle, rgba(120, 255, 214, 0.5) 0%, rgba(120, 255, 214, 0.12) 40%, transparent 70%);
+            animation-delay: 0s;
+        }
+        .spot-2 {
+            width: 500px;
+            height: 500px;
+            bottom: -15%;
+            left: -10%;
+            background: radial-gradient(circle, rgba(168, 255, 120, 0.4) 0%, rgba(168, 255, 120, 0.1) 40%, transparent 70%);
+            animation-delay: 2.5s;
+        }
+        .spot-3 {
+            width: 400px;
+            height: 400px;
+            top: 25%;
+            left: 55%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.35) 0%, rgba(0, 212, 255, 0.08) 40%, transparent 70%);
+            animation-delay: 4.5s;
+        }
+        .spot-4 {
+            width: 450px;
+            height: 450px;
+            top: 55%;
+            right: 5%;
+            background: radial-gradient(circle, rgba(120, 255, 214, 0.45) 0%, rgba(120, 255, 214, 0.1) 40%, transparent 70%);
+            animation-delay: 1.5s;
+        }
+        .spot-5 {
+            width: 350px;
+            height: 350px;
+            top: 8%;
+            left: 12%;
+            background: radial-gradient(circle, rgba(168, 255, 120, 0.4) 0%, rgba(168, 255, 120, 0.08) 40%, transparent 70%);
+            animation-delay: 3.5s;
+        }
+
+        @keyframes gentlePulse {
+            0% { opacity: 0.4; transform: scale(1); }
+            100% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            background: rgba(17, 17, 26, 0.88);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(120, 255, 214, 0.12);
+            border-radius: 16px;
+            padding: 45px 40px;
+            width: 420px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 60px rgba(120, 255, 214, 0.04);
+            position: relative;
+            z-index: 1;
+        }
+
+        .chrome-line {
+            width: 60px;
+            height: 3px;
+            margin: 0 auto 18px;
+            background: linear-gradient(90deg, #a8ff78, #78ffd6, #00d4ff);
+            border-radius: 4px;
+            box-shadow: 0 0 30px rgba(120, 255, 214, 0.2);
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 4px;
+            background: linear-gradient(180deg, #a8ff78 0%, #78ffd6 50%, #00d4ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 40px rgba(120, 255, 214, 0.15);
+            letter-spacing: -0.5px;
+        }
+
+        .mode-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .mode {
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .mode.active {
+            display: flex;
+        }
+
+        .mode-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 2px;
+        }
+        .mode-sub {
+            text-align: center;
+            color: #5a6279;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+        .mode-sub span {
+            color: #78ffd6;
+        }
+
+        .webhook-box {
+            background: rgba(20, 20, 30, 0.6);
+            border: 1px solid rgba(120, 255, 214, 0.12);
+            border-radius: 10px;
+            padding: 14px 16px;
+            transition: 0.3s;
+            cursor: text;
+            backdrop-filter: blur(10px);
+        }
+        .webhook-box:focus-within {
+            border-color: #78ffd6;
+            box-shadow: 0 0 20px rgba(120, 255, 214, 0.06);
+        }
+        .webhook-box .label {
+            font-size: 11px;
+            color: #5a6279;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .webhook-box input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            font-family: inherit;
+        }
+        .webhook-box input::placeholder {
+            color: #3d455a;
+            font-style: italic;
+        }
+
+        .hint {
+            font-size: 12px;
+            color: #3d455a;
+        }
+        .hint span {
+            color: #78ffd6;
+        }
+
+        .btn-discord {
+            width: 100%;
+            padding: 14px;
+            background: #5865F2;
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+        .btn-discord:hover {
+            background: #4752c4;
+            transform: scale(1.01);
+            box-shadow: 0 0 20px rgba(88, 101, 242, 0.2);
+        }
+        .btn-discord.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .btn-discord i {
+            margin-right: 10px;
+        }
+        .btn-discord-error {
+            color: #ef4444;
+            font-size: 12px;
+            text-align: center;
+            display: none;
+            margin-top: 4px;
+        }
+        .btn-discord-error.show {
+            display: block;
+        }
+
+        .how-it-works {
+            background: rgba(20, 20, 30, 0.4);
+            border-radius: 10px;
+            padding: 16px 18px;
+            border: 1px solid rgba(120, 255, 214, 0.06);
+            font-size: 13px;
+            color: #7a8299;
+            line-height: 1.7;
+            backdrop-filter: blur(10px);
+        }
+        .how-it-works strong {
+            color: #c8d0e0;
+        }
+        .how-it-works .highlight {
+            color: #78ffd6;
+        }
+
+        .toggle-link {
+            text-align: center;
+            font-size: 13px;
+            color: #5a6279;
+            cursor: pointer;
+            transition: 0.2s;
+            background: none;
+            border: none;
+            font-family: inherit;
+            display: block;
+        }
+        .toggle-link:hover {
+            color: #c8d0e0;
+        }
+        .toggle-link .highlight {
+            color: #78ffd6;
+            cursor: pointer;
+        }
+        .toggle-link .highlight:hover {
+            color: #a8ff78;
+            text-decoration: underline;
+        }
+
+        .error {
+            background: rgba(42, 26, 26, 0.8);
+            color: #ef4444;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            border: 1px solid rgba(58, 26, 26, 0.5);
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            color: #3d455a;
+            font-size: 12px;
+        }
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            border-top: 1px solid rgba(120, 255, 214, 0.08);
+        }
+        .divider::before {
+            margin-right: 15px;
+        }
+        .divider::after {
+            margin-left: 15px;
+        }
+
+        .credentials-form {
+            display: none;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .credentials-form.active {
+            display: flex;
+        }
+
+        .discord-view {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .discord-view.hidden {
+            display: none;
+        }
+
+        .credentials-form .field-label {
+            font-size: 13px;
+            color: #8a92aa;
+            margin-bottom: 4px;
+            display: block;
+        }
+        .credentials-form .field-label small {
+            color: #3d455a;
+            font-size: 12px;
+            font-weight: 400;
+            margin-left: 6px;
+        }
+        .credentials-form input {
+            width: 100%;
+            padding: 12px 14px;
+            background: rgba(20, 20, 30, 0.6);
+            border: 1px solid rgba(120, 255, 214, 0.12);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            font-family: inherit;
+        }
+        .credentials-form input:focus {
+            border-color: #78ffd6;
+        }
+        .credentials-form input::placeholder {
+            color: #3d455a;
+            font-style: italic;
+        }
+        .credentials-form .signin-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #a8ff78, #78ffd6);
+            border: none;
+            border-radius: 8px;
+            color: #0a0a0f;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 4px;
+        }
+        .credentials-form .signin-btn:hover {
+            transform: scale(1.01);
+            box-shadow: 0 0 20px rgba(120, 255, 214, 0.15);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #3d455a;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== LIGHT SPOTS ===== -->
+    <div class="spot spot-1"></div>
+    <div class="spot spot-2"></div>
+    <div class="spot spot-3"></div>
+    <div class="spot spot-4"></div>
+    <div class="spot spot-5"></div>
+
+    <div class="container">
+
+        <div class="chrome-line"></div>
+        <div class="logo">MuleHack</div>
+
+        <!-- ===== MODE 1: CREATE ACCOUNT ===== -->
+        <div class="mode active" id="modeCreate">
+            <div class="mode-sub">Create account · Get started with <span>MuleHack</span></div>
+
+            {% if error %}
+            <div class="error">{{ error }}</div>
+            {% endif %}
+
+            <div class="webhook-box" onclick="document.getElementById('webhookInput').focus()">
+                <span class="label">Discord Webhook URL</span>
+                <input type="text" id="webhookInput" placeholder="https://discord.com/api/webhooks/..." value="">
+            </div>
+
+            <p class="hint">We'll send your account credentials to this webhook</p>
+
+            <a href="#" class="btn-discord disabled" id="discordBtn">
+                <i class="fab fa-discord"></i> Continue with Discord
+            </a>
+            <div class="btn-discord-error" id="discordBtnError">Please paste a valid Discord webhook URL first.</div>
+
+            <div class="how-it-works">
+                <strong>How it works:</strong><br>
+                1. Create a Discord webhook in your server<br>
+                2. Paste the webhook URL above<br>
+                3. Click <span class="highlight">"Continue with Discord"</span> to authenticate<br>
+                4. Your credentials will be sent to your webhook
+            </div>
+
+            <button class="toggle-link" onclick="switchMode('signin')">
+                Already have an account? <span class="highlight">Sign in</span>
+            </button>
+        </div>
+
+        <!-- ===== MODE 2: SIGN IN ===== -->
+        <div class="mode" id="modeSignin">
+            <div class="mode-title">Welcome back</div>
+            <div class="mode-sub">Sign in to your account</div>
+
+            {% if error %}
+            <div class="error">{{ error }}</div>
+            {% endif %}
+
+            <!-- DISCORD VIEW -->
+            <div class="discord-view" id="discordView">
+                <a href="/discord-login" class="btn-discord">
+                    <i class="fab fa-discord"></i> Login with Discord
+                </a>
+
+                <button class="toggle-link" onclick="toggleCredentials()">
+                    <span class="highlight">Sign in with credentials instead</span>
+                </button>
+            </div>
+
+            <!-- CREDENTIALS VIEW -->
+            <div class="credentials-form" id="credentialsForm">
+                <div>
+                    <label class="field-label">User ID or Username <small>Enter your user ID or username</small></label>
+                    <input type="text" name="username" placeholder="User ID or username">
+                </div>
+                <div>
+                    <label class="field-label">Account Key</label>
+                    <input type="password" name="password" placeholder="......">
+                </div>
+                <button class="signin-btn" id="manualSigninBtn">Sign In</button>
+
+                <button class="toggle-link" onclick="toggleCredentials()">
+                    <span class="highlight">Sign in with Discord instead</span>
+                </button>
+            </div>
+
+            <button class="toggle-link" onclick="switchMode('create')" style="margin-top:4px;">
+                Don't have an account? <span class="highlight">Sign up</span>
+            </button>
+        </div>
+
+    </div>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <script>
+        function switchMode(mode) {
+            const create = document.getElementById('modeCreate');
+            const signin = document.getElementById('modeSignin');
+
+            if (mode === 'create') {
+                create.classList.add('active');
+                signin.classList.remove('active');
+            } else {
+                signin.classList.add('active');
+                create.classList.remove('active');
+                document.getElementById('discordView').classList.remove('hidden');
+                document.getElementById('credentialsForm').classList.remove('active');
+            }
+        }
+
+        function toggleCredentials() {
+            const discordView = document.getElementById('discordView');
+            const credForm = document.getElementById('credentialsForm');
+
+            discordView.classList.toggle('hidden');
+            credForm.classList.toggle('active');
+        }
+
+        const webhookInput = document.getElementById('webhookInput');
+        const discordBtn = document.getElementById('discordBtn');
+        const discordBtnError = document.getElementById('discordBtnError');
+
+        function validateWebhook() {
+            const webhook = webhookInput.value.trim();
+
+            if (webhook && webhook.startsWith('https://discord.com/api/webhooks/')) {
+                discordBtn.classList.remove('disabled');
+                discordBtnError.classList.remove('show');
+                return true;
+            } else {
+                discordBtn.classList.add('disabled');
+                discordBtnError.classList.add('show');
+                return false;
+            }
+        }
+
+        webhookInput.addEventListener('input', validateWebhook);
+
+        discordBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            const webhook = webhookInput.value.trim();
+
+            if (!webhook || !webhook.startsWith('https://discord.com/api/webhooks/')) {
+                discordBtnError.classList.add('show');
+                return;
+            }
+
+            window.location.href = '/discord-login?webhook=' + encodeURIComponent(webhook);
+        });
+
+        document.getElementById('manualSigninBtn').addEventListener('click', function() {
+            const username = document.querySelector('#credentialsForm input[name="username"]').value;
+            const password = document.querySelector('#credentialsForm input[name="password"]').value;
+
+            if (!username || !password) {
+                alert('Please fill in both fields.');
+                return;
+            }
+
+            fetch('/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password)
+            }).then(() => {
+                location.reload();
+            });
+        });
+
+        validateWebhook();
+    </script>
+
+</body>
+</html>
