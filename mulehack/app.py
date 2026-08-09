@@ -15,7 +15,7 @@ app.secret_key = "mulehack_super_secret_key_2026"
 # ===== CONFIG =====
 DISCORD_CLIENT_ID = "1535262080662245457"
 DISCORD_CLIENT_SECRET = "nP_Yg8Sq8SVQxYSQgInBfOZdi1o-yEg-"
-DISCORD_REDIRECT_URI = "http://127.0.0.1:8080/callback"
+DISCORD_REDIRECT_URI = "https://mulehack-1.onrender.com/callback"
 DISCORD_AUTH_URL = "https://discord.com/api/oauth2/authorize"
 DISCORD_TOKEN_URL = "https://discord.com/api/oauth2/token"
 DISCORD_USER_URL = "https://discord.com/api/users/@me"
